@@ -20,10 +20,14 @@ public final class ReflectionMagic {
         return null;
     }
 
-    public static Unsafe getUnsafe() throws NoSuchFieldException, SecurityException, IllegalArgumentException, IllegalAccessException {
-        final Field access = Unsafe.class.getDeclaredField("theUnsafe");
-        access.setAccessible(true);
-        return (Unsafe) access.get(null);
+    public static Unsafe getUnsafe() {
+        try {
+            final Field access = Unsafe.class.getDeclaredField("theUnsafe");
+            access.setAccessible(true);
+            return (Unsafe) access.get(null);
+        } catch (NoSuchFieldException | SecurityException | IllegalArgumentException | IllegalAccessException ignored) {
+            return null;
+        }
     }
 
     public static void forceOpenField(Field field) {
